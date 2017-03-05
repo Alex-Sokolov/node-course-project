@@ -4,8 +4,17 @@ import { processStartString, processHeaders } from './utils/request';
 
 const server = net.createServer();
 
+server.on('error', err => {
+  throw err;
+});
+
 server.on('connection', socket => {
+  socket.on('error', err => {
+    throw err;
+  });
+
   let buffer = [];
+
   socket.on('data', data => {
     buffer.push(data);
 
