@@ -1,6 +1,7 @@
 import net from 'net';
 import { requestContainsEmptyLine, processBuffer } from './utils/buffer';
 import { processStartString, processHeaders } from './utils/request';
+import { responseWithFileAtPath } from './utils/response';
 
 const server = net.createServer();
 
@@ -31,6 +32,11 @@ server.on('connection', socket => {
 
       global.console.log('Request headers:');
       global.console.log(headers);
+
+      // Пробуем показать файл
+      if (startHeader.requestPath !== '/') {
+        responseWithFileAtPath(startHeader.requestPath);
+      }
     }
   });
 });
