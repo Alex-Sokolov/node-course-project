@@ -4,6 +4,10 @@
   "description": "Node.js course project",
   "main": "index.js",
   "author": "Alex Sokolov",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Alex-Sokolov/node-course-project.git"
+  },
   "license": "MIT",
   "scripts": {
     "start": "rimraf ./dist && babel -d ./dist ./src -s && node ./dist/main.js",
