@@ -57,8 +57,9 @@ server.on('connection', socket => {
         if (err.code === 'ENOENT') {
           socket.write(`${httpVersion} ${getStatusCode(HttpStatus.NOT_FOUND)}`);
         }
+
         // Нет прав доступа к файлу
-        if (err.code === 'EACCES') {
+        if (err.code === 'EACCES' || err.code === 'EPERM') {
           socket.write(`${httpVersion} ${getStatusCode(HttpStatus.BAD_REQUEST)}`);
         }
 
