@@ -1,17 +1,11 @@
+import HttpStatus from 'http-status-codes';
+
 /**
  * Генерация заголовка ответа
  * @param {number} code
  */
 export function getStatusCode(code) {
-  switch (code) {
-    case 200:
-      return '200 OK';
-    case 404:
-      return '404 Not Found';
-    case 400:
-    default:
-      return '400 Bad Request';
-  }
+  return `${code} ${HttpStatus.getStatusText(code)}`;
 }
 
 /**
