@@ -9,11 +9,6 @@ import generateResponse from './utils/response';
 const server = net.createServer();
 
 /**
- * Кодировка по умолчанию
- */
-const ENCODING = 'utf-8';
-
-/**
  * Путь к каталогу со статикой
  */
 const STATIC_FOLDER = path.join(__dirname, '../static');
@@ -55,7 +50,7 @@ server.on('connection', socket => {
     const filePath = path.join(STATIC_FOLDER, startHeader.requestPath);
 
     fsp
-      .readFile(filePath, { encoding: ENCODING })
+      .readFile(filePath)
       .then(fileContent => generateResponse(200, fileContent))
       .catch(err => {
         // Нет файла
@@ -71,7 +66,7 @@ server.on('connection', socket => {
         throw err;
       })
       .then(response => {
-        socket.end(response, ENCODING);
+        socket.end(response);
       })
       .catch(err => {
         throw err;
