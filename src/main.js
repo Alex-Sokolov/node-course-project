@@ -2,9 +2,14 @@ import net from 'net';
 import { requestContainsEmptyLine, processBuffer } from './utils/buffer';
 import { processStartString, processHeaders } from './utils/request';
 import generateResponse from './utils/response';
-import getStaticFileContents from './utils/files';
+import getStaticFile from './utils/files';
 
 const server = net.createServer();
+
+/**
+ * Кодировка по умолчанию
+ */
+const ENCODING = 'utf-8';
 
 server.on('error', err => {
   throw err;
@@ -39,10 +44,10 @@ server.on('connection', socket => {
 
     // Пробуем показать файл
     if (startHeader.requestPath !== '/') {
-      getStaticFileContents(startHeader.requestPath)
+      getStaticFile(startHeader.requestPath)
         .then(generateResponse)
         .then(response => {
-          socket.end(response, 'utf-8');
+          socket.end(response, ENCODING);
         })
         .catch(err => {
           throw err;

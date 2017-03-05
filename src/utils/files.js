@@ -15,9 +15,7 @@ const STATIC_FOLDER = path.join(__dirname, '../../static');
  * Получение содержимого файла из каталога static
  * @param {string} fileName
  */
-export default function getStaticFileContents(fileName) {
+export default function getStaticFile(fileName) {
   const filePath = path.join(STATIC_FOLDER, fileName);
-  const fileContent = fsp.readFile(filePath, { encoding: ENCODING });
-
-  return fileContent;
+  return fsp.readFile(filePath, { encoding: ENCODING });
 }
