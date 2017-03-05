@@ -14,7 +14,8 @@ export function getStatusCode(code) {
 export default function generateResponse(code, data) {
   const response = [
     `HTTP/1.1 ${getStatusCode(code)}`,
-    // `Content-type: image/png`,
+    `Content-Length: ${data.length}`,
+    '',
     data,
     '',
   ].join('\r\n');
