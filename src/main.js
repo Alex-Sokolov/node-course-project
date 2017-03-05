@@ -19,12 +19,18 @@ server.on('connection', socket => {
     buffer.push(data);
 
     if (requestContainsEmptyLine(data)) {
-      const [startString, ...headers] = processBuffer(buffer);
-
-      processStartString(startString);
-      processHeaders(headers);
-
+      const [rawStartString, ...rawRequestHeaders] = processBuffer(buffer);
       buffer = [];
+
+      const startHeader = processStartString(rawStartString);
+
+      global.console.log('Request start string:');
+      global.console.log(startHeader.requestType, startHeader.requestPath, startHeader.httpVersion);
+
+      const headers = processHeaders(rawRequestHeaders);
+
+      global.console.log('Request headers:');
+      global.console.log(headers);
     }
   });
 });

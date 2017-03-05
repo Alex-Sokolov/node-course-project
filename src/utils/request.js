@@ -5,9 +5,13 @@
  * @param {string} string
  */
 export const processStartString = function processStartString(string) {
-  const requestType = string.split(' ');
-  global.console.log('Request start string:');
-  global.console.log(requestType);
+  const [requestType, requestPath, httpVersion] = string.split(' ');
+
+  return {
+    requestType,
+    requestPath,
+    httpVersion,
+  };
 };
 
 /**
@@ -41,6 +45,5 @@ export const processHeaders = function processHeaders(headersArray) {
     {},
   );
 
-  global.console.log('Request headers:');
-  global.console.log(headers);
+  return headers;
 };
