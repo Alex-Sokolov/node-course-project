@@ -1,7 +1,7 @@
 import net from 'net';
 import { requestContainsEmptyLine, processBuffer } from './utils/buffer';
 import { processStartString, processHeaders } from './utils/request';
-import { responseWithFileAtPath } from './utils/response';
+import { responseWithFileAtPath, generateResponse } from './utils/response';
 
 const server = net.createServer();
 
@@ -35,7 +35,14 @@ server.on('connection', socket => {
 
       // Пробуем показать файл
       if (startHeader.requestPath !== '/') {
-        responseWithFileAtPath(startHeader.requestPath);
+        responseWithFileAtPath(startHeader.requestPath)
+          .then(generateResponse)
+          .then(response => {
+            socket.end(response, 'utf-8');
+          })
+          .catch(err => {
+            throw err;
+          });
       }
     }
   });
