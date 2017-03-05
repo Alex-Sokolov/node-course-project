@@ -15,6 +15,7 @@
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
     "babel-preset-env": "^1.2.0",
+    "fs-promise": "^2.0.0",
     "rimraf": "^2.6.1"
   },
   "devDependencies": {
