@@ -68,12 +68,11 @@ server.on('connection', socket => {
         throw err;
       })
       .then(fileContent => {
-        // Определяем MIME-тип файла
-        const fileType = mime.contentType(path.extname(filePath)) || 'application/octet-stream';
+        const contentType = mime.contentType(path.extname(filePath)) || 'application/octet-stream';
 
         socket.write(`${httpVersion} ${getStatusCode(HttpStatus.OK)}`);
         socket.write(LINE_ENDING);
-        socket.write(`Content-Type: ${fileType}`);
+        socket.write(`Content-Type: ${contentType}`);
         socket.write(LINE_ENDING);
         socket.write(`Content-Length: ${fileContent.length}`);
         socket.write(EMPTY_LINE);
