@@ -1,6 +1,7 @@
 import net from 'net';
 import fsp from 'fs-promise';
 import path from 'path';
+import HttpStatus from 'http-status-codes';
 import { requestContainsEmptyLine, processBuffer } from './utils/buffer';
 import { processStartString, processHeaders } from './utils/request';
 import generateResponse from './utils/response';
@@ -59,12 +60,12 @@ server.on('connection', socket => {
       .catch(err => {
         // Нет файла
         if (err.code === 'ENOENT') {
-          return generateResponse(404, '');
+          return generateResponse(HttpStatus.NOT_FOUND, '');
         }
 
         // Нет прав доступа к файлу
         if (err.code === 'EACCES') {
-          return generateResponse(400, '');
+          return generateResponse(HttpStatus.BAD_REQUEST, '');
         }
 
         throw err;
