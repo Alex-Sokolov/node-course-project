@@ -55,7 +55,20 @@ server.on('connection', socket => {
 
     fsp
       .readFile(filePath, { encoding: ENCODING })
-      .then(generateResponse)
+      .then(fileContent => generateResponse(200, fileContent))
+      .catch(err => {
+        // Нет файла
+        if (err.code === 'ENOENT') {
+          return generateResponse(404, '');
+        }
+
+        // Нет прав доступа к файлу
+        if (err.code === 'EACCES') {
+          return generateResponse(400, '');
+        }
+
+        throw err;
+      })
       .then(response => {
         socket.end(response, ENCODING);
       })
