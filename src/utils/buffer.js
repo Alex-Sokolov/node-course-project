@@ -11,7 +11,7 @@ const LINE_ENDING = '\r\n';
 /**
  * Пустая строка
  */
-const EMPTY_LINE = LINE_ENDING.repeat(2);
+export const EMPTY_LINE = LINE_ENDING.repeat(2);
 
 /**
  * Определение окончания запроса

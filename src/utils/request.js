@@ -5,11 +5,11 @@
  * @param {string} string
  */
 export const processStartString = function processStartString(string) {
-  const [requestType, requestPath, httpVersion] = string.split(' ');
+  const [method, uri, httpVersion] = string.split(' ');
 
   return {
-    requestType,
-    requestPath,
+    method,
+    uri,
     httpVersion,
   };
 };

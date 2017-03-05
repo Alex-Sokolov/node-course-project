@@ -1,10 +1,11 @@
 import net from 'net';
 import fsp from 'fs-promise';
 import path from 'path';
+import mime from 'mime-types';
 import HttpStatus from 'http-status-codes';
-import { requestContainsEmptyLine, processBuffer } from './utils/buffer';
+import { requestContainsEmptyLine, processBuffer, EMPTY_LINE } from './utils/buffer';
 import { processStartString, processHeaders } from './utils/request';
-import generateResponse from './utils/response';
+import getStatusCode from './utils/response';
 
 const server = net.createServer();
 
@@ -35,38 +36,42 @@ server.on('connection', socket => {
     buffer = [];
 
     // Стартовая строка запроса
-    const startHeader = processStartString(rawStartString);
-
-    global.console.log('Request start string:');
-    global.console.log(startHeader.requestType, startHeader.requestPath, startHeader.httpVersion);
+    const { method, uri, httpVersion } = processStartString(rawStartString);
+    global.console.log('Request start string:', method, uri, httpVersion);
 
     // Заголовки запроса
     const headers = processHeaders(rawRequestHeaders);
+    global.console.log('Request headers:', headers);
 
-    global.console.log('Request headers:');
-    global.console.log(headers);
-
-    // Показываем файл
-    const filePath = path.join(STATIC_FOLDER, startHeader.requestPath);
+    // Файл для отображения
+    const filePath = path.join(STATIC_FOLDER, uri);
 
     fsp
       .readFile(filePath)
-      .then(fileContent => generateResponse(200, fileContent))
       .catch(err => {
         // Нет файла
         if (err.code === 'ENOENT') {
-          return generateResponse(HttpStatus.NOT_FOUND, '');
+          socket.write(`${httpVersion} ${getStatusCode(HttpStatus.NOT_FOUND)}`);
         }
-
         // Нет прав доступа к файлу
         if (err.code === 'EACCES') {
-          return generateResponse(HttpStatus.BAD_REQUEST, '');
+          socket.write(`${httpVersion} ${getStatusCode(HttpStatus.BAD_REQUEST)}`);
         }
+
+        socket.write(EMPTY_LINE);
+        socket.end();
 
         throw err;
       })
-      .then(response => {
-        socket.end(response);
+      .then(fileContent => {
+        // Определяем MIME-тип файла
+        const fileType = mime.lookup(filePath) || 'application/octet-stream';
+
+        socket.write(`${httpVersion} ${getStatusCode(HttpStatus.OK)}`);
+        socket.write(`Content-Type: ${fileType}`);
+        socket.write(`Content-Length: ${fileContent.length}`);
+        socket.write(EMPTY_LINE);
+        socket.end(fileContent);
       })
       .catch(err => {
         throw err;
