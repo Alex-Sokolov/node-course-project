@@ -14,14 +14,18 @@ const server = net.createServer();
  */
 const STATIC_FOLDER = path.join(__dirname, '../static');
 
-server.on('error', err => {
+/**
+ * Обработка ошибок
+ * @param {Error} err
+ */
+const errorCallback = function errorCallback(err) {
   throw err;
-});
+};
+
+server.on('error', errorCallback);
 
 server.on('connection', socket => {
-  socket.on('error', err => {
-    throw err;
-  });
+  socket.on('error', errorCallback);
 
   let buffer = [];
 
@@ -75,9 +79,7 @@ server.on('connection', socket => {
         socket.write(EMPTY_LINE);
         socket.end(fileContent);
       })
-      .catch(err => {
-        throw err;
-      });
+      .catch(errorCallback);
   });
 });
 
