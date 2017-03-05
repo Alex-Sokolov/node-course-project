@@ -3,7 +3,7 @@ import fsp from 'fs-promise';
 import path from 'path';
 import mime from 'mime-types';
 import HttpStatus from 'http-status-codes';
-import { requestContainsEmptyLine, processBuffer, EMPTY_LINE } from './utils/buffer';
+import { requestContainsEmptyLine, processBuffer, LINE_ENDING, EMPTY_LINE } from './utils/buffer';
 import { processStartString, processHeaders } from './utils/request';
 import getStatusCode from './utils/response';
 
@@ -65,10 +65,12 @@ server.on('connection', socket => {
       })
       .then(fileContent => {
         // Определяем MIME-тип файла
-        const fileType = mime.lookup(filePath) || 'application/octet-stream';
+        const fileType = mime.contentType(path.extname(filePath)) || 'application/octet-stream';
 
         socket.write(`${httpVersion} ${getStatusCode(HttpStatus.OK)}`);
+        socket.write(LINE_ENDING);
         socket.write(`Content-Type: ${fileType}`);
+        socket.write(LINE_ENDING);
         socket.write(`Content-Length: ${fileContent.length}`);
         socket.write(EMPTY_LINE);
         socket.end(fileContent);
