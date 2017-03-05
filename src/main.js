@@ -1,7 +1,8 @@
 import net from 'net';
 import { requestContainsEmptyLine, processBuffer } from './utils/buffer';
 import { processStartString, processHeaders } from './utils/request';
-import { responseWithFileAtPath, generateResponse } from './utils/response';
+import generateResponse from './utils/response';
+import getStaticFileContents from './utils/files';
 
 const server = net.createServer();
 
@@ -35,7 +36,7 @@ server.on('connection', socket => {
 
       // Пробуем показать файл
       if (startHeader.requestPath !== '/') {
-        responseWithFileAtPath(startHeader.requestPath)
+        getStaticFileContents(startHeader.requestPath)
           .then(generateResponse)
           .then(response => {
             socket.end(response, 'utf-8');

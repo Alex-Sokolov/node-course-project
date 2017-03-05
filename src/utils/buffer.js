@@ -1,5 +1,3 @@
-// Функции обработки буфера
-
 /**
  * Кодировка по умолчанию
  */
@@ -11,18 +9,23 @@ const ENCODING = 'utf-8';
 const LINE_ENDING = '\r\n';
 
 /**
- * Определение окончание запроса
+ * Пустая строка
+ */
+const EMPTY_LINE = LINE_ENDING.repeat(2);
+
+/**
+ * Определение окончания запроса
  * по пустой строке
  * @param {binary} data
  */
-export const requestContainsEmptyLine = function requestContainsEmptyLine(data) {
-  return data.toString(ENCODING).endsWith(LINE_ENDING.repeat(2));
-};
+export function requestContainsEmptyLine(data) {
+  return data.toString(ENCODING).endsWith(EMPTY_LINE);
+}
 
 /**
  * Преобразование буфера в массив строк
  * @param {binary} buffer
  */
-export const processBuffer = function processBuffer(buffer) {
+export function processBuffer(buffer) {
   return buffer.join('').toString(ENCODING).split(LINE_ENDING);
-};
+}
