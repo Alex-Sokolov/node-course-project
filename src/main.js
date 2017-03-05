@@ -20,31 +20,33 @@ server.on('connection', socket => {
   socket.on('data', data => {
     buffer.push(data);
 
-    if (requestContainsEmptyLine(data)) {
-      const [rawStartString, ...rawRequestHeaders] = processBuffer(buffer);
-      buffer = [];
+    if (!requestContainsEmptyLine(data)) {
+      return;
+    }
 
-      const startHeader = processStartString(rawStartString);
+    const [rawStartString, ...rawRequestHeaders] = processBuffer(buffer);
+    buffer = [];
 
-      global.console.log('Request start string:');
-      global.console.log(startHeader.requestType, startHeader.requestPath, startHeader.httpVersion);
+    const startHeader = processStartString(rawStartString);
 
-      const headers = processHeaders(rawRequestHeaders);
+    global.console.log('Request start string:');
+    global.console.log(startHeader.requestType, startHeader.requestPath, startHeader.httpVersion);
 
-      global.console.log('Request headers:');
-      global.console.log(headers);
+    const headers = processHeaders(rawRequestHeaders);
 
-      // Пробуем показать файл
-      if (startHeader.requestPath !== '/') {
-        getStaticFileContents(startHeader.requestPath)
-          .then(generateResponse)
-          .then(response => {
-            socket.end(response, 'utf-8');
-          })
-          .catch(err => {
-            throw err;
-          });
-      }
+    global.console.log('Request headers:');
+    global.console.log(headers);
+
+    // Пробуем показать файл
+    if (startHeader.requestPath !== '/') {
+      getStaticFileContents(startHeader.requestPath)
+        .then(generateResponse)
+        .then(response => {
+          socket.end(response, 'utf-8');
+        })
+        .catch(err => {
+          throw err;
+        });
     }
   });
 });
