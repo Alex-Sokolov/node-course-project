@@ -24,6 +24,9 @@ const errorCallback = function errorCallback(err) {
 
 server.on('error', errorCallback);
 
+process.on('uncaughtException', errorCallback);
+process.on('unhandledRejection', errorCallback);
+
 server.on('connection', socket => {
   socket.on('error', errorCallback);
 
