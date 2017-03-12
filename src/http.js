@@ -22,18 +22,13 @@ export default class MyHttp extends EventEmitter {
    * Создание сервера
    */
   static createServer() {
+    console.log('http createServer');
     this.server = net.createServer();
 
-    return this;
-  }
+    this.server.on('connection', socket => {
+      console.log('server connection', socket);
+    });
 
-  /**
-   * Прослушивание порта
-   * @param {Number} port
-   */
-  static listen(port) {
-    this.server.listen(process.env.PORT || port);
-
-    return this;
+    return this.server;
   }
 }
