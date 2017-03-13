@@ -4,10 +4,11 @@ import myHttp from './http';
 
 const server = myHttp.createServer();
 server.listen(process.env.PORT || 3000, () => {
-  console.log('server listen');
+  console.log('[server listen]');
 });
 
 server.on('request', (req, res) => {
+  console.log('[server request]');
   global.console.log(req.headers, req.method, req.url);
 
   res.setHeader('Content-Type', 'application/json');
