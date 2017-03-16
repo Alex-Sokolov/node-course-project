@@ -18,6 +18,9 @@ export default class HttpResponse extends Writable {
     // Socket
     this.socket = socket;
 
+    // Заголовки ответа
+    this.headers = {};
+
     // Флаг отправлены ли заголовки
     this.headersSent = false;
 
