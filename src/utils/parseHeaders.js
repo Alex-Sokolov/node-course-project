@@ -1,15 +1,15 @@
-// Функции по работе с запросом
+// Функции по парсингу запроса
 
 /**
- * Обработка стартовой строки запроса
+ * Парсинг стартовой строки запроса
  * @param {string} string
  */
-export const processStartString = function processStartString(string) {
-  const [method, uri, httpVersion] = string.split(' ');
+export const parseStartString = function parseStartString(startString) {
+  const [method, url, httpVersion] = startString.split(' ');
 
   return {
     method,
-    uri,
+    url,
     httpVersion,
   };
 };
@@ -20,13 +20,10 @@ export const processStartString = function processStartString(string) {
 const HEADERS_DELIMITER = ': ';
 
 /**
- * Обработка заголовков запроса
+ * Парсинг заголовков запроса
  * @param {array} headersArray
  */
-export const processHeaders = function processHeaders(headersArray) {
-  // Выпиливаем пустые строки в конце заголовков
-  headersArray.splice(-2, 2);
-
+export const parseHeaders = function parseHeaders(headersArray) {
   const headers = headersArray.reduce(
     (acc, item) => {
       const delimiter = item.search(HEADERS_DELIMITER);
@@ -42,7 +39,7 @@ export const processHeaders = function processHeaders(headersArray) {
 
       return acc;
     },
-    {},
+    {}
   );
 
   return headers;
