@@ -12,17 +12,25 @@ server.on('request', (req, res) => {
   global.console.log(req.headers, req.method, req.url);
   // global.console.log('RES', res);
 
-  // res.setHeader('Content-Type', 'application/json');
-  // res.writeHead(200); // Вызов writeHead опционален
+  if (req.url === '/') {
+    res.writeHead(200);
+    res.socket.end();
+    return;
+  }
 
   // Вывод текстового файла
   const filePath = path.join(STATIC_FOLDER, req.url);
   const mimeType = mime.contentType(path.extname(filePath)) || 'application/octet-stream';
 
-  console.log('FILEPATH', filePath);
-
   res.setHeader('Content-Type', mimeType);
+  res.writeHead(200); // Вызов writeHead опционален
 
   const stream = fs.createReadStream(filePath);
-  stream.pipe(res);
+  stream.on('open', () => {
+    stream.pipe(res.socket);
+  });
+
+  stream.on('error', err => {
+    res.end(err);
+  });
 });

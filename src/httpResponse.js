@@ -25,34 +25,37 @@ export default class HttpResponse extends Writable {
     // Флаг отправлены ли заголовки
     this.headersSent = false;
 
-    return this;
-  }
+    // Отправка заголовков ответа
+    this.writeHead = function writeHead(code) {
+      this.statusCode = code;
+      this.sendHeaders();
+    };
 
-  // Установка заголовка
-  static setHeader(name, value) {
-    this.headers[name] = value;
-
-    return this;
-  }
-
-  static writeHead(code) {
-    this.statusCode = code;
+    // Установка заголовка ответа
+    this.setHeader = function setHeader(name, value) {
+      this.headers[name] = value;
+    };
 
     return this;
   }
 
   // Запись
-  static _write() {
+  static _write(chunk, encoding, callback) {
     // проверяем что отправлены заголовки
     // если нет отправляем
     if (!this.headersSent) {
       this.sendHeaders();
     }
+
+    this.socket.write(chunk);
+
+    callback();
   }
 
   // Отправка всех заголовков в socket
   sendHeaders() {
     console.log('SEND HEADERS');
+    console.log('HEADERS', this.headers);
 
     if (this.headersSent) {
       this.emit('error', new Error('Заголовки уже отправлялись'));
@@ -70,7 +73,7 @@ export default class HttpResponse extends Writable {
 
     this.socket.write(LINE_ENDING);
 
-    // метод который отправляет все заголовки
+    // Отмечаем что заголовки отправили
     this.headersSent = true;
   }
 }
