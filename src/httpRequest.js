@@ -62,16 +62,16 @@ export default class HttpRequest extends Readable {
 
     // Получаем кусочек буфера, что относится уже к телу запроса
     const chunk = this.buffer.slice(emptyLineIndex + Buffer.from(EMPTY_LINE).length);
-    console.log('CHUNK LENGTH', chunk.length);
+    global.console.log('CHUNK LENGTH', chunk.length);
 
     // В буфере оставляем только заголовки
     this.buffer = this.buffer.slice(0, emptyLineIndex);
-    console.log('BUFFER LENGTH', this.buffer.length);
+    global.console.log('BUFFER LENGTH', this.buffer.length);
 
     // Если был кусочек тела запроса, аншифтим его обратно
     // this.socket.removeListener('readable', () => {});
     if (chunk.length) {
-      console.log('NEED UNSHIFT CHUNK', chunk);
+      global.console.log('NEED UNSHIFT CHUNK', chunk);
       this.socket.unshift(chunk);
     }
 

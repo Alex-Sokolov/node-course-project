@@ -32,7 +32,6 @@ export default class MyHttp extends EventEmitter {
 
       // Обработка получения заголовков запроса
       req.on('headers', () => {
-        console.log('[request ON HEADERS]');
         this.server.emit('request', req, res);
       });
     });
