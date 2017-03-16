@@ -1,6 +1,7 @@
 import fs from 'fs-promise';
 import path from 'path';
 import mime from 'mime-types';
+import HttpStatus from 'http-status-codes';
 import myHttp from './http';
 
 // Каталог со статикой
@@ -30,16 +31,28 @@ server.on('request', (req, res) => {
   const filePath = path.join(STATIC_FOLDER, req.url);
   const mimeType = mime.contentType(path.extname(filePath)) || 'application/octet-stream';
 
-  res.setHeader('Content-Type', mimeType);
-  res.writeHead(200); // Вызов writeHead опционален
-
   const stream = fs.createReadStream(filePath);
+
   stream.on('open', () => {
+    res.setHeader('Content-Type', mimeType);
+    // TODO: не работает без его вызова
+    res.writeHead(200); // Вызов writeHead опционален
+
     stream.pipe(res.socket);
   });
 
   stream.on('error', err => {
-    res.end(err);
+    // Нет файла
+    if (err.code === 'ENOENT') {
+      res.writeHead(HttpStatus.NOT_FOUND);
+    }
+
+    // Нет прав доступа к файлу
+    if (err.code === 'EACCES' || err.code === 'EPERM') {
+      res.writeHead(HttpStatus.BAD_REQUEST);
+    }
+
+    res.end();
   });
 });
 
