@@ -52,7 +52,7 @@ server.on('request', (req, res) => {
       res.writeHead(HttpStatus.BAD_REQUEST);
     }
 
-    res.end();
+    res.socket.end();
   });
 });
 
