@@ -27,12 +27,14 @@ export default class HttpResponse extends Writable {
 
     // Отправка заголовков ответа
     this.writeHead = function writeHead(code) {
+      // console.log('WRITE HEAD');
       this.statusCode = code;
       this.sendHeaders();
     };
 
     // Установка заголовка ответа
     this.setHeader = function setHeader(name, value) {
+      // console.log('SET HEADER', name);
       this.headers[name] = value;
     };
 
@@ -41,8 +43,6 @@ export default class HttpResponse extends Writable {
 
   // Запись
   static _write(chunk, encoding, callback) {
-    // проверяем что отправлены заголовки
-    // если нет отправляем
     if (!this.headersSent) {
       this.sendHeaders();
     }
@@ -54,8 +54,7 @@ export default class HttpResponse extends Writable {
 
   // Отправка всех заголовков в socket
   sendHeaders() {
-    console.log('SEND HEADERS');
-    console.log('HEADERS', this.headers);
+    // console.log('SEND HEADERS', this.headers);
 
     if (this.headersSent) {
       this.emit('error', new Error('Заголовки уже отправлялись'));

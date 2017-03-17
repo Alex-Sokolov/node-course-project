@@ -35,7 +35,7 @@ server.on('request', (req, res) => {
 
   stream.on('open', () => {
     res.setHeader('Content-Type', mimeType);
-    // TODO: не работает без его вызова
+    // TODO: без writeHead выводит исходники не в той кодировке
     res.writeHead(200); // Вызов writeHead опционален
 
     stream.pipe(res.socket);
