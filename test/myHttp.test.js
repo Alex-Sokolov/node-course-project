@@ -5,7 +5,7 @@ import myHttp from '../src/http';
 test('Should contain createServer function', t => {
   t.plan(2);
 
-  if (typeof myHttp.createServer === 'function') {
+  if (myHttp.createServer && typeof myHttp.createServer === 'function') {
     t.pass();
   }
 
