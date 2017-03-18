@@ -1,5 +1,5 @@
 import test from 'ava';
 
-test('httpRequest temp', t => {
+test('httpResponse temp', t => {
   t.pass();
 });
