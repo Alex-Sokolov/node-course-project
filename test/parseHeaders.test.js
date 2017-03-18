@@ -2,13 +2,14 @@ import test from 'ava';
 import { parseStartString, parseHeaders } from '../src/utils/parseHeaders';
 
 test('Should correct parse request start string', t => {
-  t.plan(4);
+  t.plan(5);
 
   const fakeStartString = 'GET /foo.html HTTP/1.1';
 
   const startString = parseStartString(fakeStartString);
 
   t.true(startString instanceof Object);
+  t.true(Object.keys(startString).length === 3);
   t.true(startString.method === 'GET');
   t.true(startString.url === '/foo.html');
   t.true(startString.httpVersion === 'HTTP/1.1');
