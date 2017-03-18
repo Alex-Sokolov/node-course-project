@@ -13,7 +13,8 @@
     "start": "rimraf ./dist && babel -d ./dist ./src -s && node ./dist/main.js",
     "dev": "node ./dev.js",
     "lint:js": "eslint ./src",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "test": "ava --verbose"
   },
   "dependencies": {
     "babel-cli": "^6.24.0",
@@ -25,12 +26,14 @@
     "rimraf": "^2.6.1"
   },
   "devDependencies": {
+    "ava": "^0.18.2",
     "babel-register": "^6.24.0",
-    "eslint": "^3.17.1",
+    "eslint": "^3.18.0",
     "eslint-config-airbnb-base": "^11.1.1",
     "eslint-config-prettier": "^1.5.0",
     "eslint-plugin-import": "^2.2.0",
     "lint-staged": "^3.4.0",
+    "nyc": "^10.1.2",
     "pre-commit": "^1.2.2"
   },
   "babel": {
@@ -58,5 +61,20 @@
     "env": {
       "node": true
     }
+  },
+  "ava": {
+    "files": [
+      "test/**/*.js"
+    ],
+    "source": [
+      "src/**/*.js"
+    ],
+    "concurrency": 5,
+    "failFast": true,
+    "powerAssert": false,
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
   }
 }
