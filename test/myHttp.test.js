@@ -5,11 +5,6 @@ import myHttp from '../src/http';
 test('Should contain createServer function', t => {
   t.plan(2);
 
-  if (myHttp.createServer && typeof myHttp.createServer === 'function') {
-    t.pass();
-  }
-
-  if (myHttp.createServer() instanceof EventEmitter) {
-    t.pass();
-  }
+  t.true(myHttp.createServer && typeof myHttp.createServer === 'function');
+  t.true(myHttp.createServer() instanceof EventEmitter);
 });
