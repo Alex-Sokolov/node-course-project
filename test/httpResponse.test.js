@@ -13,17 +13,32 @@ test('HttpResponse stream is Writable Stream', t => {
 test('HttpResponse have setHeader method', t => {
   t.plan(1);
 
-  const fakeSocket = {};
-  const res = new HttpResponse(fakeSocket);
+  const res = new HttpResponse({});
 
   t.true(res.setHeader && typeof res.setHeader === 'function');
 });
 
-// test.skip('All headers added with setheader should be sent to socket', t => {
-//   t.fail();
-// });
+test('setHeader method should overwrite header with the same name', t => {
+  t.plan(6);
 
-// test.skip('setHeader method should overwrite header with the same name', t => {
+  const res = new HttpResponse({});
+
+  t.true(Object.keys(res.headers).length === 0);
+
+  res.setHeader('Content-Encoding', 'gzip');
+  t.true(Object.keys(res.headers).length === 1);
+
+  res.setHeader('Content-Type', 'text/plain');
+  t.true(Object.keys(res.headers).length === 2);
+
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  t.true(Object.keys(res.headers).length === 2);
+
+  t.true(res.headers['Content-Encoding'] === 'gzip');
+  t.true(res.headers['Content-Type'] === 'text/html; charset=utf-8');
+});
+
+// test.skip('All headers added with setheader should be sent to socket', t => {
 //   t.fail();
 // });
 
