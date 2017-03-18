@@ -14,7 +14,7 @@
     "dev": "node ./dev.js",
     "lint:js": "eslint ./src",
     "lint-staged": "lint-staged",
-    "test": "ava --verbose",
+    "test": "ava",
     "coverage": "./node_modules/.bin/nyc -r html ava"
   },
   "dependencies": {
@@ -73,6 +73,7 @@
     "concurrency": 5,
     "failFast": true,
     "powerAssert": false,
+    "verbose": true,
     "require": [
       "babel-register"
     ],
