@@ -38,13 +38,11 @@ test('Should correct parse request headers', t => {
 });
 
 test('Should throw an error on invalid headers', t => {
-  t.plan(2);
+  t.plan(1);
 
   const fakeHeaders = ['Host: localhost:3000', 'Connection:<><><><>keep-alive', 'Pragma: no-cache'];
 
-  const error = t.throws(() => {
+  t.throws(() => {
     parseHeaders(fakeHeaders);
   });
-
-  t.is(error.message, 'В заголовке нет разделителя');
 });
