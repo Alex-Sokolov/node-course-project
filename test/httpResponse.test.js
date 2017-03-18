@@ -38,10 +38,16 @@ test('setHeader method should overwrite header with the same name', t => {
   t.true(res.headers['Content-Type'] === 'text/html; charset=utf-8');
 });
 
-// test.skip('All headers added with setheader should be sent to socket', t => {
-//   t.fail();
-// });
+test('setHeader method should NOT sent headers', t => {
+  t.plan(2);
 
-// test.skip('setHeader method should NOT sent headers', t => {
+  const res = new HttpResponse({});
+
+  t.true(res.headersSent === false);
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  t.true(res.headersSent === false);
+});
+
+// test.skip('All headers added with setheader should be sent to socket', t => {
 //   t.fail();
 // });
