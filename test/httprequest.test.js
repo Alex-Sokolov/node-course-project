@@ -41,18 +41,31 @@ test('HttpRequest stream is Readable Stream', t => {
   t.true(stream instanceof Readable);
 });
 
-// test.skip('Should correctly handle when headers come in multiple chunks', t => {
-//   t.fail();
-// });
+// TODO: Наверное объединиить с тестом выше
+test.todo('HttpRequest contain body without headers');
 
-// test.skip('Call to setHeader after headers have been sent should emit error', t => {
-//   t.fail();
-// });
+// TODO: Зависает
+test.skip('Should correctly handle when headers come in multiple chunks', t => {
+  const fakeSocket = new Readable({
+    read: () => {},
+  });
 
-// test.skip('Call to writeHead should send headers with correct status line', t => {
-//   t.fail();
-// });
+  const requestStream = new HttpRequest(fakeSocket);
+  requestStream.on('headers', () => {
+    t.end();
+  });
 
-// test.skip('Call to writeHead after head was already written should emit error', t => {
-//   t.fail();
-// });
+  // eslint-disable-next-line no-bitwise
+  const fakeRequestPart1 = fakeRequest.substr(0, ~~(fakeRequest.length / 2));
+  const fakeRequestPart2 = fakeRequest.substr(fakeRequestPart1.length + 1);
+
+  fakeSocket.push(fakeRequestPart1);
+  setTimeout(() => fakeSocket.push(fakeRequestPart2));
+});
+
+test.todo('Should correctly handle headers when chunks split below \\r\\n & \\r\\n');
+test.todo('Call to setHeader after headers have been sent should emit error');
+test.todo('Call to writeHead should send headers with correct status line');
+test.todo('Call to writeHead after head was already written should emit error');
+test.todo('HttpRequest should emit close event if socket was closed');
+test.todo('HttpRequest should NOT emit request till all headers have been sent');

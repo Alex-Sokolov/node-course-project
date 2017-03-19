@@ -48,6 +48,21 @@ test('setHeader method should NOT sent headers', t => {
   t.true(res.headersSent === false);
 });
 
-// test.skip('All headers added with setheader should be sent to socket', t => {
-//   t.fail();
-// });
+// TODO: Зависает
+test.skip('Call to setHeader after headers have been sent should emit error', t => {
+  // t.plan(1);
+
+  const res = new HttpResponse({});
+  res.headersSent = true;
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+
+  res.on('readable', () => {});
+  res.on('error', () => {
+    t.end();
+  });
+});
+
+test.todo('Call to writeHead should send headers with corresponding status line');
+test.todo('Call to writeHead after head was already written should emit error');
+test.todo('All headers added with setheader should be sent to socket');
+test.todo('Should correctly set response headers');

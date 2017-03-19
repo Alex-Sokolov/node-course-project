@@ -8,3 +8,5 @@ test('Should contain createServer function', t => {
   t.true(myHttp.createServer && typeof myHttp.createServer === 'function');
   t.true(myHttp.createServer() instanceof EventEmitter);
 });
+
+test.todo('Call to HttpServer listen should start server on corresponding port');
