@@ -13,8 +13,6 @@ export default class MyHttp extends EventEmitter {
   constructor() {
     super();
 
-    if (!(this instanceof MyHttp)) return new MyHttp();
-
     this.server = null;
 
     return this;

@@ -13,8 +13,6 @@ export default class HttpResponse extends Writable {
   constructor(socket) {
     super(socket);
 
-    if (!(this instanceof HttpResponse)) return new HttpResponse(socket);
-
     // Socket
     this.socket = socket;
 

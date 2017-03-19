@@ -13,8 +13,6 @@ export default class HttpRequest extends Readable {
   constructor(socket) {
     super(socket);
 
-    if (!(this instanceof HttpRequest)) return new HttpRequest(socket);
-
     // Состояние запроса (headers/body)
     this.state = 'HEADERS';
 
