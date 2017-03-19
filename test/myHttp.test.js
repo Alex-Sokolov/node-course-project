@@ -10,3 +10,4 @@ test('Should contain createServer function', t => {
 });
 
 test.todo('Call to HttpServer listen should start server on corresponding port');
+test.todo('HttpServer should emit request event');
