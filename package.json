@@ -35,7 +35,8 @@
     "eslint-plugin-import": "^2.2.0",
     "lint-staged": "^3.4.0",
     "nyc": "^10.1.2",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "sinon": "^2.0.0"
   },
   "babel": {
     "presets": [
